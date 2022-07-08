@@ -28,7 +28,10 @@ class HomeView extends ConsumerWidget {
                             horizontal: 10, vertical: 5),
                         child: Column(
                           children: [
-                            Text("${snapshot.data![index].title}"),
+                            Text(snapshot.data![index].id.toString()),
+                            Text(snapshot.data![index].title.en),
+                            Text(snapshot.data![index].title.ru),
+                            Text(snapshot.data![index].poster),
                           ],
                         ),
                       ),

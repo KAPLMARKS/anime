@@ -14,7 +14,7 @@ class AnimePreview {
   factory AnimePreview.fromJson(Map<String, dynamic> json) => AnimePreview(
         id: json["id"],
         title: AnimeTitle.fromJson(json),
-        poster: json["image"][0],
+        poster: json["image"]["original"],
         score: json["score"],
       );
 }
