@@ -1,3 +1,4 @@
+import 'package:anime_nya_school_uwu/domain/models/anime_preview.dart';
 import 'package:anime_nya_school_uwu/presentation/components/anime_view/anime_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -14,15 +15,29 @@ class HomeView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
-      appBar: _AppBar(),
-      body: ValueListenableBuilder<int>(
-        valueListenable: ref.viewModel.animesCount,
-        builder: (context, animesCount, ___) => ListView.builder(
-          itemCount: animesCount,
-          itemBuilder: (_, index) =>
-              AnimeView(ref.viewModel.getAnimePreview(index)),
-        ),
-      ),
+        appBar: _AppBar(),
+        body: FutureBuilder<List<AnimePreview>>(
+            future: ref.viewModel.getAnimes(),
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                return ListView.builder(
+                  itemCount: snapshot.data!.length,
+                  itemBuilder: (_, index) =>
+                      Container(
+                        margin: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 5),
+                        child: Column(
+                          children: [
+                            Text("${snapshot.data![index].title}"),
+                          ],
+                        ),
+                      ),
+                );
+              } else {
+                return Container();
+              }
+            }
+        )
     );
   }
 }

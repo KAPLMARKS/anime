@@ -10,6 +10,13 @@ class AnimePreview {
   final AnimeTitle title;
   final String poster;
   final double score;
+
+  factory AnimePreview.fromJson(Map<String, dynamic> json) => AnimePreview(
+        id: json["id"],
+        title: AnimeTitle.fromJson(json),
+        poster: json["image"][0],
+        score: json["score"],
+      );
 }
 
 class AnimeTitle {
@@ -20,4 +27,9 @@ class AnimeTitle {
 
   final String en;
   final String ru;
+
+  factory AnimeTitle.fromJson(Map<String, dynamic> json) => AnimeTitle(
+        en: json["name"],
+        ru: json["russian"],
+      );
 }

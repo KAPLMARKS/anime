@@ -1,5 +1,5 @@
 import 'package:anime_nya_school_uwu/domain/models/anime_preview.dart';
-import 'package:anime_nya_school_uwu/domain/services/api_service.dart';
+import 'package:anime_nya_school_uwu/domain/services/api/api_service.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -14,6 +14,8 @@ abstract class HomeViewModel {
   ValueListenable<int> get animesCount;
 
   AnimePreview getAnimePreview(int index);
+
+  Future<List<AnimePreview>> getAnimes();
 }
 
 class HomeViewModelImpl implements HomeViewModel {
@@ -38,5 +40,10 @@ class HomeViewModelImpl implements HomeViewModel {
     final newData = await _apiService.getAnimes();
     _animes.addAll(newData);
     animesCount.value = _animes.length;
+  }
+
+  @override
+  Future<List<AnimePreview>> getAnimes() {
+    return _apiService.getAnimes();
   }
 }
