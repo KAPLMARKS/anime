@@ -1,5 +1,4 @@
-import 'package:anime_nya_school_uwu/domain/models/anime_preview.dart';
-import 'package:anime_nya_school_uwu/presentation/components/anime_view/anime_view.dart';
+import '/domain/models/anime_preview.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -32,6 +31,7 @@ class HomeView extends ConsumerWidget {
                             Text(snapshot.data![index].title.en),
                             Text(snapshot.data![index].title.ru),
                             Text(snapshot.data![index].poster),
+                            Text(snapshot.data![index].score.toString()),
                           ],
                         ),
                       ),

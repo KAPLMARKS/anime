@@ -1,4 +1,4 @@
-import 'package:anime_nya_school_uwu/internal/app.dart';
+import '/domain/services/navigation_service.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -8,6 +8,7 @@ import '../../domain/services/auth_service.dart';
 final authViewModelProvider = Provider.autoDispose<AuthViewModel>((ref) {
   final authViewModel = AuthViewModelImpl(
     authService: ref.read(authServiceProvider),
+    navigationService: ref.read(navigationServiceProvider),
   );
   // ref.onDispose(() {
   //   authViewModel.dispose();
@@ -62,7 +63,9 @@ abstract class AuthViewModel {
 class AuthViewModelImpl implements AuthViewModel {
   AuthViewModelImpl({
     required AuthService authService,
-  }) : _authService = authService;
+    required NavigationService navigationService,
+  })  : _authService = authService,
+        _navigationService = navigationService;
 
   @override
   final GlobalKey<FormState> formKey = GlobalKey();
@@ -102,6 +105,8 @@ class AuthViewModelImpl implements AuthViewModel {
   final String passwordLabel = 'Password';
 
   final AuthService _authService;
+
+  final NavigationService _navigationService;
 
   @override
   String? onValidateLogin(String? login) {
@@ -151,7 +156,7 @@ class AuthViewModelImpl implements AuthViewModel {
         loginFieldController.text,
         passwordFieldController.text,
       );
-      App.navigatorKey.currentState?.pushReplacementNamed('/');
+      _navigationService.openHome(true);
     }
   }
 

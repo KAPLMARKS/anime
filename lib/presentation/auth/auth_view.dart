@@ -1,4 +1,4 @@
-import 'package:anime_nya_school_uwu/presentation/auth/auth_view_model.dart';
+import '../auth/auth_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

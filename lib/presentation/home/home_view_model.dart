@@ -1,5 +1,5 @@
-import 'package:anime_nya_school_uwu/domain/models/anime_preview.dart';
-import 'package:anime_nya_school_uwu/domain/services/api/api_service.dart';
+import '/domain/models/anime_preview.dart';
+import '/domain/services/api/api_service.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

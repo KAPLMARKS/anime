@@ -1,34 +1,25 @@
+import '/domain/services/navigation_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '/presentation/auth/auth_view.dart';
-import '/presentation/home/home_view.dart';
+extension _NavigationServiceRef on WidgetRef {
+  NavigationService get navigationService => read(navigationServiceProvider);
+}
 
-class App extends StatelessWidget {
+class App extends ConsumerWidget {
+
   const App({Key? key}) : super(key: key);
-
-  static final navigatorKey = GlobalKey<NavigatorState>();
 
   void run() => runApp(ProviderScope(
         child: this,
       ));
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return MaterialApp(
-      navigatorKey: navigatorKey,
-      initialRoute: '/auth',
-      onGenerateRoute: (settings) {
-        if (settings.name == '/auth') {
-          return MaterialPageRoute(
-            builder: (context) => const AuthView(),
-          );
-        } else {
-          return MaterialPageRoute(
-            builder: (context) => const HomeView(),
-          );
-        }
-      },
+      navigatorKey: ref.navigationService.navigatorKey,
+      initialRoute: ref.navigationService.initialRoute,
+      onGenerateRoute: ref.navigationService.onGenerateRoute,
     );
   }
 }
