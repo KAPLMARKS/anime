@@ -1,7 +1,5 @@
 # anime_nya_school_uwu
 
-Its Edgar's lessons about nya and uwu
-
 ## Getting Started
 
 This project is a starting point for a Flutter application.
