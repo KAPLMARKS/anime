@@ -1,6 +1,8 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:provider/provider.dart';
 
-final authServiceProvider = Provider<AuthService>((ref) => AuthServiceImpl());
+final authServiceProvider = Provider<AuthService>(
+    create: (context) => AuthServiceImpl(),
+);
 
 abstract class  AuthService {
   void login(String login, String password);

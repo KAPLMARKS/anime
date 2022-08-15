@@ -1,20 +1,20 @@
-import '/domain/services/navigation_service.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:provider/provider.dart';
 
-import '../../domain/services/auth_service.dart';
+import '/domain/services/auth_service.dart';
+import '/domain/services/navigation_service.dart';
 
-final authViewModelProvider = Provider.autoDispose<AuthViewModel>((ref) {
-  final authViewModel = AuthViewModelImpl(
-    authService: ref.read(authServiceProvider),
-    navigationService: ref.read(navigationServiceProvider),
-  );
-  // ref.onDispose(() {
-  //   authViewModel.dispose();
-  // });
-  return authViewModel;
-});
+final authViewModelProvider = Provider<AuthViewModel>(
+  create: (context) {
+    final authViewModel = AuthViewModelImpl(
+      authService: context.read(),
+      navigationService: context.read(),
+    );
+    return authViewModel;
+  },
+  dispose: (context, authViewModel) => authViewModel.dispose(),
+);
 
 abstract class AuthViewModel {
   Key get formKey;
@@ -162,12 +162,12 @@ class AuthViewModelImpl implements AuthViewModel {
 
   @override
   void onCreateAccountPressed() {
-    print('Create account');
+    throw UnimplementedError();
   }
 
   @override
   void onForgetPasswordPressed() {
-    print('Forget password');
+    throw UnimplementedError();
   }
 
   @override

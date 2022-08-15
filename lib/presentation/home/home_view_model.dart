@@ -1,12 +1,15 @@
+import 'package:flutter/foundation.dart';
+import 'package:provider/provider.dart';
+
 import '/domain/models/anime_preview.dart';
 import '/domain/services/api/api_service.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final homeViewModelProvider = Provider.autoDispose<HomeViewModel>((ref) {
-  final homeViewModel = HomeViewModelImpl(ref.read(apiServiceProvider));
-  return homeViewModel;
-});
+final homeViewModelProvider = Provider<HomeViewModel>(
+  create: (context) {
+    final homeViewModel = HomeViewModelImpl(context.read());
+    return homeViewModel;
+  },
+);
 
 abstract class HomeViewModel {
   String get title;
@@ -19,7 +22,7 @@ abstract class HomeViewModel {
 }
 
 class HomeViewModelImpl implements HomeViewModel {
-  HomeViewModelImpl(this._apiService){
+  HomeViewModelImpl(this._apiService) {
     _loadAnimes();
   }
 

@@ -1,9 +1,11 @@
-import '../auth/auth_view_model.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:provider/provider.dart';
 
-extension _AuthViewRef on WidgetRef {
-  AuthViewModel get viewModel => read(authViewModelProvider);
+import '/domain/services/auth_service.dart';
+import '/presentation/auth/auth_view_model.dart';
+
+extension _AuthViewContext on BuildContext {
+  AuthViewModel get viewModel => read();
 }
 
 class AuthView extends StatelessWidget {
@@ -11,19 +13,22 @@ class AuthView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: _Body(),
+    return MultiProvider(
+      providers: [authServiceProvider, authViewModelProvider,],
+      child: const Scaffold(
+        body: _Body(),
+      ),
     );
   }
 }
 
-class _Body extends ConsumerWidget {
+class _Body extends StatelessWidget {
   const _Body({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     return Form(
-      key: ref.viewModel.formKey,
+      key: context.viewModel.formKey,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
         child: Column(
@@ -53,35 +58,38 @@ class _Body extends ConsumerWidget {
   }
 }
 
-class _Title extends ConsumerWidget {
+class _Title extends StatelessWidget {
   const _Title({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     return Text(
-      ref.viewModel.title,
-      style: Theme.of(context).textTheme.headlineLarge,
+      context.viewModel.title,
+      style: Theme
+          .of(context)
+          .textTheme
+          .headlineLarge,
     );
   }
 }
 
-class _LoginField extends ConsumerWidget {
+class _LoginField extends StatelessWidget {
   const _LoginField({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     return TextFormField(
-      controller: ref.viewModel.loginFieldController,
-      validator: ref.viewModel.onValidatePassword,
+      controller: context.viewModel.loginFieldController,
+      validator: context.viewModel.onValidatePassword,
       decoration: InputDecoration(
-        label: Text(ref.viewModel.loginFieldLabel),
+        label: Text(context.viewModel.loginFieldLabel),
         border: const OutlineInputBorder(),
         prefixIcon: const Icon(
           Icons.person,
           color: Colors.black,
         ),
         suffixIcon: IconButton(
-          onPressed: ref.viewModel.onClearLoginPressed,
+          onPressed: context.viewModel.onClearLoginPressed,
           icon: const Icon(
             Icons.cancel_sharp,
             color: Colors.black,
@@ -92,77 +100,80 @@ class _LoginField extends ConsumerWidget {
   }
 }
 
-class _PasswordField extends ConsumerWidget {
+class _PasswordField extends StatelessWidget {
   const _PasswordField({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     return ValueListenableBuilder<bool>(
-      valueListenable: ref.viewModel.obscurePassword,
-      builder: (context, obscurePassword, ___) => TextFormField(
-        controller: ref.viewModel.passwordFieldController,
-        obscureText: obscurePassword,
-        validator: ref.viewModel.onValidatePassword,
-        decoration: InputDecoration(
-          label: Text(ref.viewModel.passwordLabel),
-          border: const OutlineInputBorder(),
-          prefixIcon: const Icon(
-            Icons.lock_outline,
-            color: Colors.black,
-          ),
-          suffixIcon: IconButton(
-            onPressed: ref.viewModel.onHidePasswordPressed,
-            icon: ValueListenableBuilder<IconData>(
-              valueListenable: ref.viewModel.hidePasswordIcon,
-              builder: (context, icon, ___) => Icon(
-                icon,
+      valueListenable: context.viewModel.obscurePassword,
+      builder: (context, obscurePassword, ___) =>
+          TextFormField(
+            controller: context.viewModel.passwordFieldController,
+            obscureText: obscurePassword,
+            validator: context.viewModel.onValidatePassword,
+            decoration: InputDecoration(
+              label: Text(context.viewModel.passwordLabel),
+              border: const OutlineInputBorder(),
+              prefixIcon: const Icon(
+                Icons.lock_outline,
                 color: Colors.black,
+              ),
+              suffixIcon: IconButton(
+                onPressed: context.viewModel.onHidePasswordPressed,
+                icon: ValueListenableBuilder<IconData>(
+                  valueListenable: context.viewModel.hidePasswordIcon,
+                  builder: (context, icon, ___) =>
+                      Icon(
+                        icon,
+                        color: Colors.black,
+                      ),
+                ),
               ),
             ),
           ),
-        ),
-      ),
     );
   }
 }
 
-class _RememberMe extends ConsumerWidget {
+class _RememberMe extends StatelessWidget {
   const _RememberMe({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     return Row(
       children: [
         ValueListenableBuilder<bool>(
-          valueListenable: ref.viewModel.rememberMe,
-          builder: (context, rememberMe, ___) => Checkbox(
-            value: rememberMe,
-            onChanged: ref.viewModel.onRememberMeChanged,
-          ),
+          valueListenable: context.viewModel.rememberMe,
+          builder: (context, rememberMe, ___) =>
+              Checkbox(
+                value: rememberMe,
+                onChanged: context.viewModel.onRememberMeChanged,
+              ),
         ),
-        Text(ref.viewModel.rememberMeLabel),
+        Text(context.viewModel.rememberMeLabel),
       ],
     );
   }
 }
 
-class _ForgetPasswordButton extends ConsumerWidget {
+class _ForgetPasswordButton extends StatelessWidget {
   const _ForgetPasswordButton({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     return TextButton(
-      onPressed: ref.viewModel.onForgetPasswordPressed,
-      child: Text(ref.viewModel.forgetPassportLabel),
+      onPressed: context.viewModel.onForgetPasswordPressed,
+      child: Text(context.viewModel.forgetPassportLabel),
     );
   }
 }
 
-class _LoginButton extends ConsumerWidget {
+class _LoginButton extends StatelessWidget {
   const _LoginButton({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     return ElevatedButton(
       style: ButtonStyle(
         shape: MaterialStateProperty.all(
@@ -171,20 +182,20 @@ class _LoginButton extends ConsumerWidget {
         backgroundColor: MaterialStateProperty.all(Colors.black),
         minimumSize: MaterialStateProperty.all(const Size(0, 50)),
       ),
-      onPressed: ref.viewModel.onLoginPressed,
-      child: Text(ref.viewModel.title),
+      onPressed: context.viewModel.onLoginPressed,
+      child: Text(context.viewModel.title),
     );
   }
 }
 
-class _CreateAccountButton extends ConsumerWidget {
+class _CreateAccountButton extends StatelessWidget {
   const _CreateAccountButton({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     return TextButton(
-      onPressed: ref.viewModel.onCreateAccountPressed,
-      child: Text(ref.viewModel.createAccountLabel),
+      onPressed: context.viewModel.onCreateAccountPressed,
+      child: Text(context.viewModel.createAccountLabel),
     );
   }
 }

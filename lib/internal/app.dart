@@ -1,25 +1,31 @@
-import '/domain/services/navigation_service.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:provider/provider.dart';
 
-extension _NavigationServiceRef on WidgetRef {
-  NavigationService get navigationService => read(navigationServiceProvider);
+import '/domain/services/api/api_service.dart';
+import '/domain/services/navigation_service.dart';
+
+extension _NavigationServiceContext on BuildContext {
+  NavigationService get navigationService => read();
 }
 
-class App extends ConsumerWidget {
-
+class App extends StatelessWidget {
   const App({Key? key}) : super(key: key);
 
-  void run() => runApp(ProviderScope(
-        child: this,
-      ));
+  void run() => runApp(
+        MultiProvider(
+          providers: [
+            navigationServiceProvider,
+            apiServiceProvider,
+          ],
+          child: this,
+        ),
+      );
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return MaterialApp(
-      navigatorKey: ref.navigationService.navigatorKey,
-      initialRoute: ref.navigationService.initialRoute,
-      onGenerateRoute: ref.navigationService.onGenerateRoute,
+  Widget build(BuildContext context) {
+    return MaterialApp.router(
+      routerDelegate: context.navigationService.routeDelegate,
+      routeInformationParser: context.navigationService.routeInformationParser,
     );
   }
 }

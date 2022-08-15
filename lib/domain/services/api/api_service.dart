@@ -1,11 +1,13 @@
 import 'dart:convert';
+import 'package:provider/provider.dart';
 import '/domain/services/api/api_constants.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 
 import '/domain/models/anime_preview.dart';
 
-final apiServiceProvider = Provider<ApiService>((ref) => ShikimoriService());
+final apiServiceProvider = Provider<ApiService>(
+  create: (context) => ShikimoriService(),
+);
 
 abstract class ApiService {
   Future<List<AnimePreview>> getAnimes();
